@@ -26,8 +26,7 @@ void setup() {
 
   groveled_bar.begin();
 
-  // WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  WiFi.begin(WIFI_SSID);
+  WiFi.begin(WIFI_SSID); // use WiFi.begin(WIFI_SSID, WIFI_PASSWORD) for secured networks;
   Serial.print("WiFi: connecting");
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
