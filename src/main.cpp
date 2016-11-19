@@ -9,10 +9,10 @@
 
 #define DEFAULT_TIME_TO_DISCHARGE 1 * 60 * 1000
 #define DEFAULT_TIME_TO_RECHARGE 30 * 1000
-#define WIFI_SSID "gnet_home"
-#define WIFI_PASSWORD "jn104Hi103veg"
-#define FIREBASE_HOST "codelab1-ed543.firebaseio.com"
-#define FIREBASE_AUTH "FkGmitQaMh1jV5QNvUuXBiE1HjXUd2eNXQH7fUen"
+#define WIFI_SSID "<wifi-ssid>"
+#define WIFI_PASSWORD "<wifi-password>"
+#define FIREBASE_HOST "<project-id>.firebaseio.com"
+#define FIREBASE_SECRET "<firebase-secret>"
 
 Ultrasonic ultrasonic = Ultrasonic(14);
 Grove_LED_Bar groveled_bar = Grove_LED_Bar(13, 12, 0);
@@ -26,7 +26,8 @@ void setup() {
 
   groveled_bar.begin();
 
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  // WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  WiFi.begin(WIFI_SSID);
   Serial.print("WiFi: connecting");
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
@@ -35,7 +36,7 @@ void setup() {
   Serial.println();
   Serial.println("WiFi: connected.");
 
-  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Firebase.begin(FIREBASE_HOST, FIREBASE_SECRET);
   unsigned time_to_discharge = Firebase.getInt("time_to_discharge");
   if (time_to_discharge <= 0) {
     time_to_discharge = DEFAULT_TIME_TO_DISCHARGE;
