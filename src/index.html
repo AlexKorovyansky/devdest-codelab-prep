@@ -4,147 +4,76 @@
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
     <title>Smart Office Chair</title>
-</head>
-<body>
-<style>
-    body {
-        padding: 20px;
-    }
-    p {
-        margin: 0;
-        padding: 0;
-    }
-    .battery {
-        position: relative;
-        width: 100px;
-        height: 300px;
-        border: 2px solid black;
-        background: #eee;
-    }
-    .battery__cell {
-        box-sizing: border-box;
-        position: relative;
-        height: 10%;
-        border: 2px solid black;
-    }
-    .battery__cell:last-child {
-        background-color: red;
-    }
-    .battery__progress {
-        overflow: hidden;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: #8DE051;
-    }
-    .battery__progress:before {
-        content: '';
-        position: absolute;
-        bottom: 30px;
-        left: 0;
-        right: 0;
-        height: 30px;
-        background-color: orange;
-    }
-    .form {
-        margin-top: 30px;
-    }
-    .form__row {
-        margin-top: 10px;
-    }
-    .form__label {
-        display: inline-block;
-        width: 160px;
-    }
-    .form__input{
-        width: 100px;
-    }
-    .form__submit {
-        margin-top: 20px;
-    }
-</style>
-<div class="battery">
-    <p class="battery__progress" id="health-bar" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-    <p class="battery__cell" />
-</div>
-<div class="form">
-    <div class="form__row">
-        <label
-                class="form__label"
-                for="timeToDischarge">
-                Time to Discharge (ms)
-        </label>
-        <input class='form__input'
-               type='text'
-               onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-               id='timeToDischarge'>
-        </input>
-    </div>
-    <div class="form__row">
-        <label
-                class="form__label"
-                for="timeToRecharge">
-                Time to Recharge (ms)
-        </label>
-        <input class='form__input'
-               type='text'
-               onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-               id='timeToRecharge'>
-        </input>
-    </div>
-    <button class="form__submit" id="ok"> OK </button>
-</div>
-</body>
-<script src='https://www.gstatic.com/firebasejs/3.6.0/firebase.js'></script>
-<script>
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyCikmFCs003Z1LVSgYi4Bd7d-RJ6Vxu1NQ",
-        authDomain: "codelab1-ed543.firebaseapp.com",
-        databaseURL: "https://codelab1-ed543.firebaseio.com",
-        storageBucket: "codelab1-ed543.appspot.com",
-        messagingSenderId: "818006347303"
-    };
-    firebase.initializeApp(config);
-
-    firebase.auth().signInWithEmailAndPassword("auth@company.com", "123456").catch(function(error) {
-        console.log("Auth error " + error.message);
-    });
-
-    firebaseDatabase = firebase.database();
-
-    var _healthBar = document.getElementById('health-bar'),
-        _timeToDischarge = document.getElementById('timeToDischarge'),
-        _timeToRecharge = document.getElementById('timeToRecharge');
-    firebaseDatabase.ref('health').on('value', function(snapshot) {
-        _healthBar.style.height = (100 * snapshot.val()) + '%';
-    });
-    firebaseDatabase.ref('time_to_discharge').on('value', function(snapshot) {
-        _timeToDischarge.value = snapshot.val();
-    });
-    firebaseDatabase.ref('time_to_recharge').on('value', function(snapshot) {
-        _timeToRecharge.value = snapshot.val()
-    });
-    document.getElementById('ok').onclick = function () {
-        if (_timeToRecharge.value > 0 && _timeToDischarge.value > 0) {
-            firebase.database().ref('/').update({
-                time_to_recharge: parseInt(_timeToRecharge.value),
-                time_to_discharge: parseInt(_timeToDischarge.value)
-            });
-        } else {
-            alert("Wrong input values!");
+    <script src='https://www.gstatic.com/firebasejs/3.6.0/firebase.js'></script>
+    <script>
+        var config = {
+            apiKey: "AIzaSyCikmFCs003Z1LVSgYi4Bd7d-RJ6Vxu1NQ",
+            authDomain: "codelab1-ed543.firebaseapp.com",
+            databaseURL: "https://codelab1-ed543.firebaseio.com",
+            storageBucket: "codelab1-ed543.appspot.com",
+            messagingSenderId: "818006347303"
+        };
+        firebase.initializeApp(config); 
+        firebase.database().ref('health').on('value', function(snapshot) {
+            document.getElementById('health-bar').style.height = (100 * snapshot.val()) + '%';
+        });
+    </script>
+    <style>
+        body {
+            padding: 20px;
         }
-    };
-</script>
-
+        p {
+            margin: 0;
+            padding: 0;
+        }
+        .battery {
+            position: relative;
+            width: 100px;
+            height: 300px;
+            border: 2px solid black;
+            background: #eee;
+        }
+        .battery__cell {
+            box-sizing: border-box;
+            position: relative;
+            height: 10%;
+            border: 2px solid black;
+        }
+        .battery__cell:last-child {
+            background-color: red;
+        }
+        .battery__progress {
+            overflow: hidden;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #8DE051;
+        }
+        .battery__progress:before {
+            content: '';
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background-color: orange;
+        }
+    </style>
+</head>
+    <body>
+        <div class="battery">
+            <p class="battery__progress" id="health-bar" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+            <p class="battery__cell" />
+        </div>
+    </body>
 </html>

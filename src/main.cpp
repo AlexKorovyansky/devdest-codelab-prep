@@ -9,10 +9,10 @@
 
 #define DEFAULT_TIME_TO_DISCHARGE 1 * 60 * 1000
 #define DEFAULT_TIME_TO_RECHARGE 30 * 1000
-#define WIFI_SSID "<wifi-ssid>"
+#define WIFI_SSID "Guest-SSID"
 #define WIFI_PASSWORD "<wifi-password>"
-#define FIREBASE_HOST "<project-id>.firebaseio.com"
-#define FIREBASE_SECRET "<firebase-secret>"
+#define FIREBASE_HOST "codelab1-ed543.firebaseio.com"
+#define FIREBASE_SECRET "FkGmitQaMh1jV5QNvUuXBiE1HjXUd2eNXQH7fUen"
 
 Ultrasonic ultrasonic = Ultrasonic(14);
 Grove_LED_Bar groveled_bar = Grove_LED_Bar(13, 12, 0);
@@ -36,6 +36,11 @@ void setup() {
   Serial.println("WiFi: connected.");
 
   Firebase.begin(FIREBASE_HOST, FIREBASE_SECRET);
+
+  Serial.println("setup finished");
+}
+
+void loop() {
   unsigned time_to_discharge = Firebase.getInt("time_to_discharge");
   if (time_to_discharge <= 0) {
     time_to_discharge = DEFAULT_TIME_TO_DISCHARGE;
@@ -45,11 +50,14 @@ void setup() {
     time_to_recharge = DEFAULT_TIME_TO_RECHARGE;
   }
   health_tracker.Configure(time_to_discharge, time_to_recharge);
-}
 
-void loop() {
   float health = health_tracker.Tick(ultrasonic.MeasureInCentimeters() < 10);
-  groveled_bar.setLevel(health * 10.0f);
+  float health_bar_level = abs(health) < 1e-10 ? 0.5f : health * 10.f;
+
+  groveled_bar.setLevel(health_bar_level);
+  Serial.print("health = ");
+  Serial.println(health);
   Firebase.setFloat("health", health);
-  delay(200);
+
+  delay(500);
 }

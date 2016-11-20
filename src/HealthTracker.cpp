@@ -8,6 +8,11 @@ HealthTracker::HealthTracker() {
 }
 
 void HealthTracker::Configure(unsigned time_to_discharge, unsigned time_to_recharge) {
+  if (this->time_to_discharge != time_to_discharge || this->time_to_recharge != time_to_recharge) {
+    this->level = 1.0f;
+    Serial.printf("Params will be updated to time_to_discharge = %d, time_to_recharge = %d\n",
+        time_to_discharge, time_to_recharge);
+  }
   this->time_to_discharge = time_to_discharge;
   this->time_to_recharge = time_to_recharge;
 }
